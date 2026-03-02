@@ -2,8 +2,8 @@
   {
     "id": "2",
     "coords": [
-      2.1870,
-      41.4495
+      41.45320242631,
+      2.1855960047851
     ],
     "year": "1910",
     "address": {
@@ -51,8 +51,8 @@
   {
     "id": "3",
     "coords": [
-      2.1860,
-      41.4505
+      41.450481,
+      2.187118
     ],
     "year": "1950s",
     "address": {
@@ -90,8 +90,8 @@
   {
     "id": "4",
     "coords": [
-      2.1880,
-      41.4510
+      41.45127,
+      2.18484
     ],
     "year": "1915-1917",
     "address": {
@@ -132,8 +132,8 @@
   {
     "id": "5",
     "coords": [
-      2.1845,
-      41.4480
+      41.4544157,
+      2.1868891
     ],
     "year": "1915",
     "address": {
@@ -177,8 +177,8 @@
   {
     "id": "6",
     "coords": [
-      0,
-      0
+      41.449073,
+      2.180561
     ],
     "year": "Desconegut",
     "address": {
@@ -189,7 +189,7 @@
     "media": [
       {
         "type": "pdf",
-        "src": "assets/media/FOTOS_Ateneu_Planta Asf\u00e0ltica/Planta asf\u00e0ltica_Ateneu Popular 9 Barris.pdf"
+        "src": "assets/media/FOTOS_Ateneu_Planta Asfàltica/Planta asfàltica_Ateneu Popular 9 Barris.pdf"
       }
     ],
     "content": {
@@ -210,8 +210,8 @@
   {
     "id": "7",
     "coords": [
-      2.1862,
-      41.4489
+      41.447890,
+      2.184972
     ],
     "year": "Desconegut",
     "address": {
@@ -222,11 +222,11 @@
     "media": [
       {
         "type": "image",
-        "src": "assets/media/FOTOS_Benjam\u00ed/Benjam\u00ed1.jpg"
+        "src": "assets/media/FOTOS_Benjamí/Benjamí1.jpg"
       },
       {
         "type": "image",
-        "src": "assets/media/FOTOS_Benjam\u00ed/Benjam\u00ed2.jpg"
+        "src": "assets/media/FOTOS_Benjamí/Benjamí2.jpg"
       }
     ],
     "content": {

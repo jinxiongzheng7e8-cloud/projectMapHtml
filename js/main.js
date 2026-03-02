@@ -18,9 +18,9 @@ const lightboxImage = document.getElementById('lightbox-image');
 const lightboxClose = document.querySelector('.lightbox-close');
 
 // --- 坐标工具 ----------------------------------------------------------------
-// 现在地图使用的是标准地理坐标系 (EPSG:3857)，
-// toPixel 会把 LatLng 转换成简单的经纬度对，返回的 x 即经度，y 即纬度。
-// 如果数据仍为像素坐标，请先转换为真实经纬度后再使用。
+// 地图使用标准 WGS84 坐标系统 (EPSG:4326)
+// JSON 数据中 coords 格式为 [latitude, longitude]
+// Leaflet marker 需要 [lat, lng]，顺序相同
 function toPixel(latlng) {
     return {
         x: latlng.lng.toFixed(6),   // x = lng（水平轴），保留小数便于调试
@@ -29,7 +29,7 @@ function toPixel(latlng) {
 }
 
 function pixelString(pt) {
-    // pt.x corresponds to longitude, pt.y to latitude after coordinate adaptation
+    // pt.x is longitude, pt.y is latitude as string with fixed decimals
     return `Lng: ${pt.x}, Lat: ${pt.y}`;
 }
 
@@ -48,15 +48,15 @@ function initMap() {
     // 可在需要时调整中心坐标或者 zoom 级别。若希望完全锁定缩放,
     // 可以将 minZoom/maxZoom 设置为相同值。
     // ------------------------------------------------------------
-    const center = [41.4489, 2.1862]; // Trinitat Nova approximate center
     const defaultZoom = 15;
 
+    // create map without specific center; will be set after markers are added
     map = L.map('map', {
-        center: center,
         zoom: defaultZoom,
         minZoom: 12,
         maxZoom: 19,
-        zoomControl: true
+        zoomControl: true,
+        center: [0,0]
     });
 
     // --- 底图图层 ----------------------------------------------------------------
@@ -95,19 +95,12 @@ function initMap() {
         // }
     }
 
-    // 限制地图可拖拽的范围为一个大致的矩形，避免用户拖出太远
-    // 使用 pad() 增加一定冗余，让相机可在区域内移动而非固定点
-    const rawBounds = L.latLngBounds([[41.445, 2.180], [41.4525, 2.1925]]);
-    const padded = rawBounds.pad(0.5); // 50% padding on each side
-    map.setMaxBounds(padded);
-    // 初始化时也用带内边距的 fitBounds，确保视野留白
-    map.fitBounds(rawBounds, { padding: [60, 60] });
+    // 地图范围将在加载数据后根据建筑点计算以避免硬编码
 
     // 点击事件保持不变，但坐标单位已经变为经纬度
-    map.on('click', (e) => {
+    map.on('click', () => {
+        // clicking on empty map simply closes any open panel
         closePanel();
-        const pt = toPixel(e.latlng);
-        console.log('map clicked at', pt);
     });
 
     // 坐标显示/调试工具 (现在显示经纬度)
@@ -126,6 +119,7 @@ async function loadData() {
         const response = await fetch('data/buildings.json');
         buildingsData = await response.json();
 
+        const latlngs = [];
         buildingsData.forEach(building => {
             const icon = L.divIcon({
                 className: 'custom-marker',
@@ -134,12 +128,11 @@ async function loadData() {
                 iconAnchor: [12, 12]
             });
 
-            // NOTE: 原来的 coords 是像素坐标 (x=lng,y=lat)。
-            // 使用真实地图时需要将这些值替换为经纬度。此处我们简单
-            // 直接当作 [lng, lat] 传给 Leaflet，后续可以在数据文件中
-            // 更新为正确的地理坐标。
-            const lat = building.coords[1];
-            const lng = building.coords[0];
+            // 数据中 coords 格式：[latitude, longitude]
+            // Leaflet marker 需要 [lat, lng]，直接传递
+            const lat = building.coords[0];
+            const lng = building.coords[1];
+            latlngs.push([lat, lng]);
 
             const marker = L.marker([lat, lng], { icon: icon }).addTo(map);
 
@@ -148,6 +141,13 @@ async function loadData() {
                 showPanel(building);
             });
         });
+
+        // 一旦所有标记添加，调整地图视图并限制范围
+        if (latlngs.length) {
+            const bounds = L.latLngBounds(latlngs);
+            map.fitBounds(bounds.pad(0.2)); // add some padding
+            map.setMaxBounds(bounds.pad(0.3));
+        }
     } catch (err) {
         console.error('无法加载建筑数据:', err);
     }
@@ -158,6 +158,8 @@ function cleanupPanelExtras() {
     if (oldActions) oldActions.remove();
     const oldSeparator = panel.querySelector('.content-separator');
     if (oldSeparator) oldSeparator.remove();
+    const oldCoords = panel.querySelector('.panel-coords');
+    if (oldCoords) oldCoords.remove();
 }
 
 // ---------- 侧滑面板 --------------------------------------------------------
@@ -168,6 +170,8 @@ const mediaEl = document.getElementById('panel-media');
 let currentBuilding = null;
 
 function showPanel(building) {
+    // clear any coordinate-only state
+    panel.classList.remove('coordinates-only');
     currentBuilding = building;
     updatePanelContent();
     panel.classList.add('show');
@@ -175,6 +179,7 @@ function showPanel(building) {
 
 function closePanel() {
     panel.classList.remove('show');
+    panel.classList.remove('coordinates-only');
     currentBuilding = null;
     // remove keyboard handler when closing
     if (panelKeyHandler) {
@@ -210,17 +215,19 @@ function updatePanelContent() {
 
     const content = currentBuilding.content[currentLang];
     titleEl.textContent = content.title;
-    descEl.textContent = content.desc;
 
-    // coordinates (lat,lng) for current building
-    const coordEl = document.getElementById('panel-coords');
-    if (coordEl && Array.isArray(currentBuilding.coords) && currentBuilding.coords.length >= 2) {
-        const lng = currentBuilding.coords[0];
-        const lat = currentBuilding.coords[1];
-        coordEl.textContent = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
-    } else if (coordEl) {
-        coordEl.textContent = '';
+    // coordinates paragraph
+    const coords = currentBuilding.coords;
+    if (coords && coords.length === 2) {
+        const coordInfo = document.createElement('p');
+        coordInfo.className = 'panel-coords';
+        // coords 格式：[latitude, longitude]
+        coordInfo.textContent = `Lat: ${coords[0].toFixed(6)}, Lng: ${coords[1].toFixed(6)}`;
+        // insert above description
+        descEl.parentNode.insertBefore(coordInfo, descEl);
     }
+
+    descEl.textContent = content.desc;
 
     // Clear previous dynamic content
     mediaEl.innerHTML = '';
@@ -359,6 +366,11 @@ function updateStaticText() {
     document.getElementById('map-toggle').setAttribute('aria-label', i18next.t('toggle_map'));
     // 其他需要翻译的元素可以在这里补充
     document.documentElement.lang = currentLang;
+
+    // If panel is showing coordinates only, update its title
+    if (panel.classList.contains('coordinates-only')) {
+        titleEl.textContent = i18next.t('coords_title');
+    }
 }
 
 // 语言按钮绑定

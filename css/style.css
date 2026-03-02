@@ -48,6 +48,14 @@ html {
     position: relative;
 }
 
+/* panel coordinate info style */
+.panel-coords {
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin: 4px 0;
+    font-weight: 500;
+}
+
 /* 地图顶部渐变高光效果 */
 #map::before {
     content: '';
@@ -367,15 +375,6 @@ html {
     opacity: 0.85;
     margin-top: 25px;
     font-size: 1.05rem; /* Slightly larger for better readability */
-}
-
-/* building coordinates shown under description */
-.panel-coords {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: var(--text);
-    margin-top: 8px;
-    opacity: 0.85;
 }
 
 /* Classic drop-cap for description */
