@@ -1,0 +1,840 @@
+/* 基础变量与主题定义 */
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --accent: #cc0000;
+    /* 红色 */
+    /* 玻璃拟态变量 (Light) */
+    --panel-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-blur: 16px;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 月光模式 (Dark Mode) */
+.theme-dark {
+    --bg: #1a1a1a;
+    --text: #f0f0f0;
+    --accent: #ff4d4d;
+    /* 玻璃拟态变量 (Dark) */
+    --panel-bg: rgba(30, 30, 30, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* Modern system font stack for better rendering */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 动态背景 Canvas */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* 在地图之下 */
+    pointer-events: none;
+}
+
+/* 地图容器 */
+#map {
+    height: 100%;
+    width: 100%;
+    background: transparent; /* 让 Canvas 背景透出来 */
+    z-index: 1;
+    /* 精致的多层阴影与边框 */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0,0,0,0.15),
+        0 0 20px rgba(0,0,0,0.1);
+    border: 2px solid var(--accent);
+    position: relative;
+}
+
+/* 地图顶部渐变高光效果 */
+#map::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 地图边缘玻璃化淡化效果 */
+#map::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 2;
+    /* 边缘径向淡化 */
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.03) 75%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    /* 玻璃效果 */
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
+    /* 边缘光晕 */
+    box-shadow: 
+        inset 0 0 40px rgba(0, 0, 0, 0.08),
+        inset 0 0 80px rgba(0, 0, 0, 0.05);
+    border-radius: inherit;
+}
+
+/* 鼠标坐标显示 */
+#coord-display {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+    border-radius: 6px;
+    pointer-events: none; /* 不阻挡鼠标 */
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+}
+
+/* 坐标显示悬停动画 */
+#coord-display:hover {
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(204, 0, 0, 0.2);
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+}
+
+/* UI 控件 */
+.ui-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+/* 统一按钮样式：黑底透明 + 白色文本 + 圆角方框 */
+.btn-common,
+.icon-btn,
+.slider-control,
+.pdf-btn,
+.lang-options button,
+.close-btn,
+.swiper-button-prev,
+.swiper-button-next {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 180ms ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 特殊尺寸保留（圆形图标按钮/小按钮） */
+.icon-btn { width: 40px; height: 40px; border-radius: 8px; padding: 0; font-size: 1rem; }
+.close-btn { width: 36px; height: 36px; border-radius: 8px; padding: 0; font-size: 1.4rem; }
+.slider-control { border-radius: 8px; padding: 8px 12px; font-size: 1.1rem; }
+.pdf-btn { border-radius: 8px; padding: 10px 16px; }
+.lang-options button { padding: 12px 20px; border-radius: 8px; }
+.swiper-button-prev, .swiper-button-next { width: 44px; height: 44px; border-radius: 8px; padding: 0; }
+
+/* 悬停/激活/焦点统一反馈 */
+.btn-common:hover,
+.icon-btn:hover,
+.slider-control:hover,
+.pdf-btn:hover,
+.lang-options button:hover,
+.close-btn:hover,
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    background: rgba(0, 0, 0, 0.75);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+}
+
+.btn-common:active,
+.icon-btn:active,
+.slider-control:active,
+.pdf-btn:active,
+.lang-options button:active,
+.close-btn:active,
+.swiper-button-prev:active,
+.swiper-button-next:active {
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transform: translateY(0);
+}
+
+.btn-common:focus,
+.icon-btn:focus,
+.slider-control:focus,
+.pdf-btn:focus,
+.lang-options button:focus,
+.close-btn:focus,
+.swiper-button-prev:focus,
+.swiper-button-next:focus {
+    outline: 2px solid rgba(204, 0, 0, 0.5);
+    outline-offset: 2px;
+}
+
+/* Primary action button style modifier */
+.btn-primary {
+    background: var(--accent);
+    color: #fff !important; /* Ensure text is white */
+    border-color: transparent;
+}
+.btn-primary:hover {
+    background: #b30000; /* Darker red */
+}
+.theme-dark .btn-primary:hover {
+    background: #ff6b6b;
+}
+/* 月相动画按钮 */
+.moon-phase {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--text);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s;
+}
+
+/* 使用伪元素模拟月影遮挡 */
+.moon-phase::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--bg);
+    transform: translateX(100%);
+    /* 初始为满月 */
+    transition: transform 0.5s ease-in-out, background-color 0.3s;
+}
+
+#theme-toggle:hover .moon-phase::after {
+    transform: translateX(40%);
+    /* 悬停变成月牙 */
+}
+
+/* 侧滑弹窗 */
+#detail-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    /* 默认宽度 */
+    min-width: 300px;
+    max-width: 50vw;
+    height: 100%;
+    /* 玻璃拟态 */
+    background: var(--panel-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-left: 1px solid var(--glass-border);
+    box-shadow: 
+        -12px 0 40px rgba(0, 0, 0, 0.25),
+        -2px 0 8px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+#detail-panel.show {
+    transform: translateX(0);
+}
+
+/* 拖拽把手 */
+.resize-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    cursor: ew-resize;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.05), transparent);
+    z-index: 2001;
+    transition: all 0.2s ease;
+}
+
+.resize-handle:hover {
+    background: linear-gradient(90deg, var(--accent), transparent);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.panel-content {
+    /* Increased padding for more breathing room */
+    padding: 25px 40px 40px 40px;
+    overflow-y: auto;
+    height: 100%;
+    box-sizing: border-box;
+    /* Base typography for readability */
+    font-size: 1rem;
+    line-height: 1.7;
+    /* Add scroll-padding to avoid content hiding under top elements */
+    scroll-padding-top: 20px;
+}
+
+/* Custom Scrollbar for a polished look */
+.panel-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.theme-dark .panel-content::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.panel-content::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.panel-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+}
+
+.panel-content p {
+    word-wrap: break-word;
+    /* Slightly transparent for better hierarchy */
+    opacity: 0.85;
+    margin-top: 25px;
+    font-size: 1.05rem; /* Slightly larger for better readability */
+}
+
+/* Classic drop-cap for description */
+.panel-content p::first-letter {
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--accent);
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.08em;
+    margin-top: 0.05em;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text);
+    transition: transform 160ms ease, opacity 160ms ease, color 160ms ease;
+    opacity: 0.85;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    opacity: 1;
+    transform: scale(1.2) rotate(90deg);
+}
+
+.close-btn:focus { outline: 3px solid rgba(0,0,0,0.12); outline-offset: 2px; }
+
+/* 媒体容器 */
+.media-container {
+    position: relative;
+}
+
+.media-container img,
+.media-container video {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 25px; /* Increased margin */
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    object-fit: cover;
+    /* 玻璃化淡化效果 - 边缘渐变遮罩 */
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.3) 100%);
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.3) 100%);
+}
+
+/* 图片轮播 */
+.slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.slider img {
+    display: none;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.slider img.active {
+    display: block;
+}
+
+.slider-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    z-index: 9999;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    pointer-events: auto;
+    touch-action: manipulation;
+}
+
+.slider-control.prev {
+    left: 10px;
+}
+
+.slider-control.next {
+    right: 10px;
+}
+
+/* Container for action buttons like PDF download */
+#panel-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+    text-decoration: none;
+}
+
+.slider img {
+    transition: opacity 220ms ease, transform 220ms ease;
+    opacity: 0;
+}
+.slider img.active {
+    opacity: 1;
+}
+
+/* Swiper overrides to fit panel layout */
+.swiper {
+    width: 100%;
+}
+.swiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.swiper img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+/* Swiper buttons now inherit from .btn-common, just need to ensure they are circular */
+.swiper-button-prev, .swiper-button-next {
+    z-index: 9999;
+}
+.swiper-button-prev::after, .swiper-button-next::after {
+    font-size: 1rem !important; /* Override Swiper's default */
+    color: #ffffff !important; /* 白色箭头 */
+}
+
+/* make sure swiper buttons are clickable on touch */
+.swiper-button-prev, .swiper-button-next { pointer-events: auto; }
+
+/* PDF 按钮响应式：窄屏时扩展为全宽并下移 */
+@media (max-width: 720px) {
+    #panel-actions .btn-primary {
+        display: block;
+        width: calc(100% - 24px);
+        margin: 12px auto 0 auto;
+        text-align: center;
+        padding: 12px 16px;
+        font-size: 1rem;
+    }
+    .slider-control {
+        padding: 10px 14px;
+    }
+}
+
+/* 媒体容器玻璃化覆盖层 */
+.media-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 25px; /* Match new margin */
+    border-radius: 8px;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 60%,
+        rgba(255, 255, 255, 0.05) 80%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+.media-container img:hover,
+.media-container video:hover {
+    box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        0 0 1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    /* 悬停时增强玻璃效果 */
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 50%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 100%);
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.97) 50%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 100%);
+}
+
+h2 {
+    color: var(--accent);
+    /* Use a pseudo-element for a modern accent underline */
+    border-bottom: none;
+    padding-bottom: 10px;
+    margin: 0 0 25px 0; /* Increased margin */
+    font-size: 2rem; /* Larger, more impactful title */
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 1.3;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Position it slightly below the text padding */
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+/* 模态框中的标题样式 */
+.modal-content h2 {
+    color: #ff1c1c;
+    border-bottom: 2px solid #ff7272;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Content Separator */
+.content-separator {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--glass-border), transparent);
+    margin: 30px 0;
+}
+
+/* 标点图标 */
+.custom-marker {
+    cursor: pointer;
+}
+
+/* 标点呼吸动画 */
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 5px rgba(204, 0, 0, 0.5);
+    }
+    50% {
+        transform: scale(1.4);
+        box-shadow: 0 0 15px 8px rgba(204, 0, 0, 0.6);
+    }
+}
+.custom-marker .marker-pulse {
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    animation: breathe 2.5s infinite ease-in-out;
+}
+
+/* 模态框 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* 调低透明度以展示背景动画 */
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    /* 玻璃拟态 */
+    background: var(--panel-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 1px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    max-width: 480px;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.lang-options button {
+    margin: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* 玻璃质感 */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Dark模式按钮样式 - 黑底白字 */
+.theme-dark .lang-options button {
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.lang-options button:hover {
+    background: #000000;
+    color: #ffffff;
+    border-color: #ffffff;
+    transform: translateY(-2px) scale(1.05);
+    /* 白光 */
+    box-shadow: 
+        0 0 12px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 6px 20px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Dark模式按钮悬停 - 白底黑字 + 红光 */
+.theme-dark .lang-options button:hover {
+    background: rgba(255, 255, 255, 0.95);
+    color: #000000;
+    border-color: #ff1c1c;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 0 14px rgba(255, 28, 28, 0.6),
+        0 0 22px rgba(255, 28, 28, 0.4),
+        0 6px 25px rgba(255, 28, 28, 0.5);
+    text-shadow: 0 0 8px rgba(255, 28, 28, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.lang-options button:active {
+    transform: translateY(0);
+}
+
+.theme-dark .lang-options button:active {
+    transform: translateY(0);
+}
+
+/* Leaflet 图片覆盖层 - map.jpeg 边缘淡化效果 */
+.leaflet-image-layer {
+    /* 圆角 */
+    border-radius: 16px;
+    overflow: hidden;
+    /* 边缘径向淡化遮罩 */
+    mask-image: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 40%,
+        rgba(0, 0, 0, 0.95) 60%,
+        rgba(0, 0, 0, 0.8) 80%,
+        rgba(0, 0, 0, 0.5) 95%,
+        rgba(0, 0, 0, 0.2) 100%
+    );
+    -webkit-mask-image: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 1) 40%,
+        rgba(0, 0, 0, 0.95) 60%,
+        rgba(0, 0, 0, 0.8) 80%,
+        rgba(0, 0, 0, 0.5) 95%,
+        rgba(0, 0, 0, 0.2) 100%
+    );
+    /* 玻璃光泽效果 */
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.03));
+    transition: filter 0.3s ease;
+}
+
+.leaflet-image-layer:hover {
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.06));
+}
+
+/* 图片灯箱 (Lightbox) */
+#lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 4000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+#lightbox-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: scale(0.9);
+}
+
+#lightbox-overlay.show img {
+    transform: scale(1);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3rem;
+    line-height: 1;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s, transform 0.2s;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.lightbox-close:hover {
+    opacity: 1;
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* Swiper 按钮位置优化 */
+.media-container .swiper-button-prev,
+.media-container .swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+}
+
+.media-container .swiper-button-prev { left: -22px; }
+.media-container .swiper-button-next { right: -22px; }
+
+/* 窄屏时将按钮移回内部 */
+@media (max-width: 500px) {
+    .media-container .swiper-button-prev { left: 10px; }
+    .media-container .swiper-button-next { right: 10px; }
+}

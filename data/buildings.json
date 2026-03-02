@@ -1,0 +1,247 @@
+[
+  {
+    "id": "2",
+    "coords": [
+      534,
+      711
+    ],
+    "year": "1910",
+    "address": {
+      "ca": "Carrer d'Aiguablava, 119, 08033 Barcelona",
+      "es": "Carrer d'Aiguablava, 119, 08033 Barcelona",
+      "en": "Carrer d'Aiguablava, 119, 08033 Barcelona"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Pont Tres Ulls/0005-Carrer-Ausona-n\u00BA94-any-1970-Foto-de-Sebastian-Torres-Navarro-1024x711.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Pont Tres Ulls/451f7a41066a8a18b98dcec362334c8e.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Pont Tres Ulls/C\u00f2pia de Pont_3ulls_2.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Pont Tres Ulls/C\u00f2pia de Pont_3ulls_3.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Pont Tres Ulls/C\u00f2pia de Pont_3ulls.jpg"
+      }
+    ],
+    "content": {
+      "ca": {
+        "title": "Pont dels Tres Ulls",
+        "desc": "Construït el 1910 com a part de l'Aqüeducte Alt de Montcada, projecte iniciat el 1893 per portar aigua des de Montcada fins a Vallcarca. Mai va arribar a utilitzar-se perquè el cabal del riu Besòs era insuficient. Als anys 70 va ser soterrat per evitar accidents a causa de la seva alçada. L'any 2015 va ser parcialment desenterrat gràcies a la iniciativa veïnal i municipal. Té uns 40 metres de llargada, 5,8 metres d'amplada i 13 metres d'alçada. Els seus tres ulls circulars (de 8, 10 i 6 metres de diàmetre) permetien el pas de la torrentada que baixa de la muntanya. Forma part de la memòria històrica del barri de Trinitat Nova i està estretament vinculat a la Casa de l'Aigua."
+      },
+      "es": {
+        "title": "Puente de los Tres Ojos",
+        "desc": "Construido en 1910 como parte del Acueducto Alto de Montcada, un proyecto iniciado en 1893 para llevar agua desde Montcada hasta Vallcarca. Nunca llegó a utilizarse porque el caudal del río Besòs era insuficiente. En los años 70 fue soterrado para evitar accidentes debido a su altura. En 2015 fue parcialmente desenterrado gracias a la iniciativa vecinal y municipal. Tiene 40 metros de longitud, 5,8 metros de ancho y 13 metros de alto. Sus tres ojos circulares (de 8, 10 y 6 metros de diámetro) permitían el paso de la torrentera que baja de la montaña. Forma parte de la memoria histórica del barrio de Trinitat Nova y está estrechamente vinculado a la Casa del Agua."
+      },
+      "en": {
+        "title": "Three Eyes Bridge",
+        "desc": "Built in 1910 as part of the Alt de Montcada Aqueduct, a project initiated in 1893 to bring water from Montcada to Vallcarca. It was never used because the flow of the Besòs River was insufficient. In the 1970s, it was buried to prevent accidents due to its height. In 2015, it was partially unearthed thanks to neighborhood and municipal initiatives. It measures 40 meters long, 5.8 meters wide, and 13 meters high. Its three circular openings (8, 10, and 6 meters in diameter) were designed to allow mountain streams to pass through. It is part of the historical memory of the Trinitat Nova neighborhood and is closely linked to the Casa de l'Aigua."
+      }
+    }
+  },
+  {
+    "id": "3",
+    "coords": [
+      805,
+      488
+    ],
+    "year": "1950s",
+    "address": {
+      "ca": "Carrer de Palam\u00f3s, 70, 08033 Barcelona",
+      "es": "Carrer de Palam\u00f3s, 70, 08033 Barcelona",
+      "en": "Carrer de Palam\u00f3s, 70, 08033 Barcelona"
+    },
+    "media": [
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/01-S6004822.JPG" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/05-PA080223.JPG" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/06-PA080224.JPG" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/12-S6004816.JPG" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/14-S6004826.JPG" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/C\u00f2pia de Torre_Rellotge.jpg" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/C\u00f2pia de Torre_Rellotge_2.jpg" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/C\u00f2pia de Torre_Rellotge_3.jpg" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/C\u00f2pia de Torre_Rellotge_4.jpg" },
+      { "type": "image", "src": "assets/media/drive-download-20260227T100219Z-1-001/FOTOS_Torre Rellotge/C\u00f2pia de Torre_Rellotge_5.jpg" }
+    ],
+    "content": {
+      "ca": {
+        "title": "Torre del Rellotge",
+        "desc": "Construïda als anys 50 del segle XX durant el procés d'urbanització de Trinitat Nova, impulsat pel Patronat Municipal de l'Habitatge. Era un dels símbols més importants del barri, situada al carrer de Palam\u00f3s, envoltada de pins. Degut als greus problemes d'aluminosi (formig\u00f3 degradat), l'edifici va ser enderrocat. Des de llavors, els veïns i veïnes han reivindicat la seva reconstrucció com a element de mem\u00f2ria col\u00b7lectiva. El Pla de barris de l'Ajuntament de Barcelona ha impulsat projectes de recuperació de la mem\u00f2ria vinculats a la torre, incloent-hi exposicions i activitats participatives per tal de preservar el seu record entre els residents, especialment els nouvinguts."
+      },
+      "es": {
+        "title": "Torre del Reloj",
+        "desc": "Construida en los años 50 del siglo XX durante el proceso de urbanización de Trinitat Nova, impulsado por el Patronato Municipal de la Vivienda. Era uno de los símbolos más importantes del barrio, situada en la calle de Palam\u00f3s, rodeada de pinos. Debido a los graves problemas de aluminosis (hormig\u00f3n degradado), el edificio fue derribado. Desde entonces, los vecinos y vecinas han reivindicado su reconstrucción como elemento de memoria colectiva. El Pla de barris del Ayuntamiento de Barcelona ha impulsado proyectos de recuperación de la memoria vinculados a la torre, incluyendo exposiciones y actividades participativas para preservar su recuerdo entre los residentes, especialmente los recién llegados."
+      },
+      "en": {
+        "title": "Clock Tower",
+        "desc": "Built in the 1950s during the urbanization process of Trinitat Nova, promoted by the Municipal Housing Board. It was one of the most important symbols of the neighborhood, located on Carrer de Palam\u00f3s, surrounded by pine trees. Due to severe aluminosis problems (degraded concrete), the building was demolished. Since then, neighbors have demanded its reconstruction as an element of collective memory. Barcelona City Council's 'Pla de barris' (Neighborhood Plan) has promoted memory recovery projects linked to the tower, including exhibitions and participatory activities to preserve its memory among residents, especially newcomers."
+      }
+    }
+  },
+  {
+    "id": "4",
+    "coords": [
+      855,
+      809
+    ],
+    "year": "1915-1917",
+    "address": {
+      "ca": "Carrer de Garb\u00ed, 2-6, 08033 Barcelona",
+      "es": "Carrer de Garb\u00ed, 2-6, 08033 Barcelona",
+      "en": "Carrer de Garb\u00ed, 2-6, 08033 Barcelona"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Casa de l_aigua/Casa de l_aigua1.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Casa de l_aigua/Caasa de l_aigua2.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Casa de l_aigua/Caasa de l_aigua3 i casa de la bruixa.jpg"
+      }
+    ],
+    "content": {
+      "ca": {
+        "title": "Casa de l'Aigua",
+        "desc": "Construïda entre 1915 i 1917, obra dels enginyers Felip Steva i Planas i Joan Sitjes. És un dels primers edificis de Barcelona construïts amb formigó armat. Formava part d'un complex sistema d'abastament d'aigua que connectava amb la Casa de l'Aigua de Trinitat Vella mitjançant un túnel subterrani. La seva funció era clorar i emmagatzamar aigua procedent dels pous de Montcada i Reixac, per distribuir-la després a la ciutat. Va funcionar fins al 1989. L'any 2015 va ser rehabilitada i reoberta com a equipament cultural i centre d'educació ambiental. Actualment forma part del Museu d'Història de Barcelona (MUHBA) i acull un viver de la professió. Inclou un espai d'horts comunitaris gestionats pels veïns. Està catalogada com a Bé Cultural d'Interès Local (núm. 2866)."
+      },
+      "es": {
+        "title": "Casa del Agua",
+        "desc": "Construida entre 1915 y 1917, obra de los ingenieros Felip Steva i Planas y Joan Sitjes. Es uno de los primeros edificios de Barcelona construidos con hormigón armado. Formaba parte de un complejo sistema de abastecimiento de agua que conectaba con la Casa del Agua de Trinitat Vella mediante un túnel subterráneo. Su función era clorar y almacenar agua procedente de los pozos de Montcada y Reixac, para distribuirla después a la ciudad. Funcionó hasta 1989. En 2015 fue rehabilitada y reabierta como equipamiento cultural y centro de educación ambiental. Actualmente forma parte del Museo de Historia de Barcelona (MUHBA) y acoge un vivero de oficios. Incluye un espacio de huertos comunitarios gestionados por los vecinos. Está catalogada como Bien Cultural de Interés Local (núm. 2866)."
+      },
+      "en": {
+        "title": "Casa de l'Aigua",
+        "desc": "Built between 1915 and 1917 by engineers Felip Steva i Planas and Joan Sitjes, it is one of the first buildings in Barcelona constructed with reinforced concrete. It was part of a complex water supply system connected to the Casa de l'Aigua de Trinitat Vella via an underground tunnel. Its function was to chlorinate and store water from the Montcada and Reixac wells before distribution to the city. It operated until 1989. In 2015, it was renovated and reopened as a cultural facility and environmental education center. It is now part of the Barcelona History Museum (MUHBA) and houses a vocational workshop. The site includes community gardens managed by local residents. It is listed as a Cultural Asset of Local Interest (No. 2866)."
+      }
+    }
+  },
+
+  {
+    "id": "5",
+    "coords": [
+      800,
+      919
+    ],
+    "year": "1915",
+    "address": {
+      "ca": "Carrer d'Aiguablava, 133, 08033 Barcelona",
+      "es": "Carrer d'Aiguablava, 133, 08033 Barcelona",
+      "en": "Carrer d'Aiguablava, 133, 08033 Barcelona"
+    },
+    "media": [
+      {
+        "type": "pdf",
+        "src": "assets/media/FOTOS_Casa de la bruixa/Casa de la Bruixa.pdf"
+      },
+      {
+        "type": "pdf",
+        "src": "assets/media/FOTOS_Casa de la bruixa/Casa de la Bruixa1.pdf"
+      },
+      {
+        "type": "pdf",
+        "src": "assets/media/FOTOS_Casa de la bruixa/Casa de la Bruixa2.pdf"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Casa de l_aigua/Caasa de l_aigua3 i casa de la bruixa.jpg"
+      }
+    ],
+    "content": {
+      "ca": {
+        "title": "Casa de la Bruixa",
+        "desc": "Construïda l'any 1915, és la primera i única casa que es va arribar a construir dins del Projecte de Foment de la ciutat jardí per a classes mitjanes i obreres a Espanya. Popularment coneguda com a Casa de la Bruixa, es troba al carrer d'Aiguablava, molt a prop del Pont dels Tres Ulls. Actualment es troba en estat ruïnós. Forma part del mateix conjunt històric que el Pont dels Tres Ulls i la Casa de l'Aigua, vinculat al projecte d'abastament d'aigua d'inicis del segle XX. La seva qualificació urbanística actual és de zona verda, fet que dificultarà la seva rehabilitació com a equipament. És un element emblemàtic de la memòria del barri."
+      },
+      "es": {
+        "title": "Casa de la Bruja",
+        "desc": "Construida en 1915, es la primera y única casa que se llegó a construir dentro del Proyecto de Fomento de la ciudad jardín para clases medias y obreras en España. Popularmente conocida como Casa de la Bruja, se encuentra en la calle d'Aiguablava, muy cerca del Puente de los Tres Ullos. Actualmente se encuentra en estado ruinoso. Forma parte del mismo conjunto histórico que el Puente de los Tres Ullos y la Casa del Agua, vinculado al proyecto de abastecimiento de agua de principios del siglo XX. Su calificación urbanística actual es de zona verde, lo que dificulta su rehabilitación como equipamiento. Es un elemento emblemático de la memoria del barrio."
+      },
+      "en": {
+        "title": "Casa de la Bruixa",
+        "desc": "Built in 1915, it was the first and only house constructed as part of Spain's Garden City Promotion Project for the middle and working classes. Popularly known as the Witch's House, it is located on Carrer d'Aiguablava, very close to the Three Eyes Bridge. It is currently in a state of ruin. It is part of the same historical complex as the Three Eyes Bridge and the Casa de l'Aigua, linked to the early 20th-century water supply project. Its current urban zoning classification is green space, which complicates its restoration as a public facility. It is an emblematic element of the neighborhood's memory."
+      }
+    }
+  },
+  {
+    "id": "6",
+    "coords": [
+      0,
+      0
+    ],
+    "year": "Desconegut",
+    "address": {
+      "ca": "Barri de Trinitat Nova, Barcelona",
+      "es": "Barrio de Trinitat Nova, Barcelona",
+      "en": "Trinitat Nova neighborhood, Barcelona"
+    },
+    "media": [
+      {
+        "type": "pdf",
+        "src": "assets/media/FOTOS_Ateneu_Planta Asf\u00e0ltica/Planta asf\u00e0ltica_Ateneu Popular 9 Barris.pdf"
+      }
+    ],
+    "content": {
+      "ca": {
+        "title": "Ateneu de la Planta Asf\u00e0ltica",
+        "desc": "Espai cultural i ve\u00efnal vinculat a l'antiga planta asf\u00e0ltica del barri. Forma part de la xarxa d'Ateneus Populars de Barcelona. M\u00e9s informaci\u00f3 disponible al document PDF."
+      },
+      "es": {
+        "title": "Ateneo de la Planta Asf\u00e1ltica",
+        "desc": "Espacio cultural y vecinal vinculado a la antigua planta asf\u00e1ltica del barrio. Forma parte de la red de Ateneos Populares de Barcelona. M\u00e1s informaci\u00f3n disponible en el document PDF."
+      },
+      "en": {
+        "title": "Asphalt Plant Athenaeum",
+        "desc": "Cultural and community space linked to the former asphalt plant in the neighborhood. It is part of the Barcelona Popular Athenaeums network. More information available in the PDF document."
+      }
+    }
+  },
+  {
+    "id": "7",
+    "coords": [
+      0,
+      0
+    ],
+    "year": "Desconegut",
+    "address": {
+      "ca": "Barri de Trinitat Nova, Barcelona",
+      "es": "Barrio de Trinitat Nova, Barcelona",
+      "en": "Trinitat Nova neighborhood, Barcelona"
+    },
+    "media": [
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Benjam\u00ed/Benjam\u00ed1.jpg"
+      },
+      {
+        "type": "image",
+        "src": "assets/media/FOTOS_Benjam\u00ed/Benjam\u00ed2.jpg"
+      }
+    ],
+    "content": {
+      "ca": {
+        "title": "Benjam\u00ed",
+        "desc": "Edifici o espai del barri de Trinitat Nova. La informaci\u00f3 detallada est\u00e0 pendent de recopilaci\u00f3 a partir de l'arxiu fotogr\u00e0fic."
+      },
+      "es": {
+        "title": "Benjam\u00ed",
+        "desc": "Edificio o espacio del barrio de Trinitat Nova. La informacio\u00f3n detallada est\u00e1 pendiente de recopilaci\u00f3n a partir del archivo fotogr\u00e1fico."
+      },
+      "en": {
+        "title": "Benjam\u00ed",
+        "desc": "Building or space in the Trinitat Nova neighborhood. Detailed information is pending compilation from the photographic archive."
+      }
+    }
+  }
+]

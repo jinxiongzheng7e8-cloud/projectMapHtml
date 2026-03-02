@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Map Preview</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+</head>
+
+<body>
+
+    <!-- 动态背景 Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- 语言选择模态框 (初始显示) -->
+    <div id="lang-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="lang-title">SELECCIONAR IDIOMA</h2>
+            <div class="lang-options">
+                <button data-lang="ca">CATALÀ</button>
+                <button data-lang="es">ESPAÑOL</button>
+                <button data-lang="en">ENGLISH</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI 控件栏 -->
+    <div class="ui-controls">
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+            <div class="moon-phase"></div>
+        </button>
+        <button id="lang-toggle" class="icon-btn" aria-label="Change Language">
+            <i class="fa-solid fa-globe"></i>
+        </button>
+    </div>
+
+    <!-- 地图容器 -->
+    <div id="map"></div>
+    <!-- 鼠标坐标显示 -->
+    <div id="coord-display"></div>
+
+    <!-- 侧滑弹窗 -->
+    <div id="detail-panel">
+        <div class="resize-handle"></div>
+        <button id="close-panel" class="close-btn">&times;</button>
+
+        <div class="panel-content">
+            <h2 id="panel-title"></h2>
+            <div id="panel-media" class="media-container">
+                <!-- 图片或视频将注入此处 -->
+            </div>
+            <p id="panel-desc"></p>
+        </div>
+    </div>
+
+    <!-- 灯箱 (Lightbox) 用于图片放大 -->
+    <div id="lightbox-overlay">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-image" src="" alt="Zoomed Image">
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/i18next@23.2.3/dist/umd/i18next.min.js"></script>
+    <!-- 本地脚本 -->
+    <script src="js/bg-animation.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/drag.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
