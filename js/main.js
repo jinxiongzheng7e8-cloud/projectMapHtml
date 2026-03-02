@@ -29,7 +29,8 @@ function toPixel(latlng) {
 }
 
 function pixelString(pt) {
-    return `x: ${pt.x}, y: ${pt.y}`;
+    // pt.x corresponds to longitude, pt.y to latitude after coordinate adaptation
+    return `Lng: ${pt.x}, Lat: ${pt.y}`;
 }
 
 // 若需从 [x,y] 创建 LatLng（用于数据定位）
@@ -84,9 +85,23 @@ function initMap() {
     // 将切换按钮样式同步为当前状态
     updateMapButton();
 
+    // 添加自定义类名到 Leaflet 默认控制容器，便于合并/重新命名或单独样式
+    if (map && map._controlContainer) {
+        map._controlContainer.classList.add('custom-control-container');
+        // 若需要可以移到 .ui-controls 内：
+        // const ui = document.querySelector('.ui-controls');
+        // if (ui && map._controlContainer.parentNode !== ui) {
+        //     ui.appendChild(map._controlContainer);
+        // }
+    }
+
     // 限制地图可拖拽的范围为一个大致的矩形，避免用户拖出太远
-    const bounds = L.latLngBounds([[41.445, 2.180], [41.4525, 2.1925]]);
-    map.setMaxBounds(bounds);
+    // 使用 pad() 增加一定冗余，让相机可在区域内移动而非固定点
+    const rawBounds = L.latLngBounds([[41.445, 2.180], [41.4525, 2.1925]]);
+    const padded = rawBounds.pad(0.5); // 50% padding on each side
+    map.setMaxBounds(padded);
+    // 初始化时也用带内边距的 fitBounds，确保视野留白
+    map.fitBounds(rawBounds, { padding: [60, 60] });
 
     // 点击事件保持不变，但坐标单位已经变为经纬度
     map.on('click', (e) => {
@@ -196,6 +211,16 @@ function updatePanelContent() {
     const content = currentBuilding.content[currentLang];
     titleEl.textContent = content.title;
     descEl.textContent = content.desc;
+
+    // coordinates (lat,lng) for current building
+    const coordEl = document.getElementById('panel-coords');
+    if (coordEl && Array.isArray(currentBuilding.coords) && currentBuilding.coords.length >= 2) {
+        const lng = currentBuilding.coords[0];
+        const lat = currentBuilding.coords[1];
+        coordEl.textContent = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+    } else if (coordEl) {
+        coordEl.textContent = '';
+    }
 
     // Clear previous dynamic content
     mediaEl.innerHTML = '';
