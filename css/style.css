@@ -14,7 +14,7 @@
 .theme-dark {
     --bg: #1a1a1a;
     --text: #f0f0f0;
-    --accent: #ff4d4d;
+    --accent: #8b0000;
     /* 玻璃拟态变量 (Dark) */
     --panel-bg: rgba(30, 30, 30, 0.75);
     --glass-border: rgba(255, 255, 255, 0.1);
@@ -136,9 +136,8 @@ html {
 }
 
 /* 叶子图默认控制容器改名后的样式，可以与 .ui-controls 共享外观 */
-.custom-control-container,
-.leaflet-control-container {
-    /* 保留 Leaflet 的原有定位，同时允许自定义样式 */
+.custom-control-container {
+    /* 保留自定义控制容器样式 */
     position: absolute;
     top: 20px;
     right: 20px;
@@ -147,13 +146,21 @@ html {
     gap: 10px;
     pointer-events: auto;
 }
+/* Leaflet 默认容器会获得 custom-control-container 类，通过 JS 移动到 `.ui-controls` */
+/* 但可根据需求隐藏所有这类控件 */
+.leaflet-control-container.custom-control-container {
+    display: none !important;
+}
+.leaflet-control-container {
+    /* no display override; children will inherit button styling */
+}
 
 /* 隐藏 Leaflet 自己添加的背景框（可按需调整） */
 .custom-control-container .leaflet-control {
     background: transparent;
     box-shadow: none;
 }
-/* 统一按钮样式：黑底透明 + 白色文本 + 圆角方框 */
+/* 统一按钮样式：红底+白字/图标，鼠标移入时变暗（在暗色模式下则变亮） */
 .btn-common,
 .icon-btn,
 .slider-control,
@@ -168,8 +175,8 @@ html {
     gap: 6px;
     padding: 8px 12px;
     border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid transparent;
+    background: var(--accent);
     color: #ffffff;
     cursor: pointer;
     font-weight: 600;
@@ -194,8 +201,8 @@ html {
 .close-btn:hover,
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-    background: rgba(0, 0, 0, 0.75);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    /* hover in light theme: dim buttons slightly */
+    filter: brightness(0.8);
     transform: translateY(-2px);
 }
 
@@ -241,10 +248,12 @@ html {
     border-color: transparent;
 }
 #map-toggle.active:hover {
-    background: #b30000;
+    /* hover effect uses dim by default; will be overridden by dark-mode rules */
+    filter: brightness(0.8);
 }
 .theme-dark .btn-primary:hover {
-    background: #ff6b6b;
+    /* brighten slightly over the dark-red base */
+    background: #a30000;
 }
 /* 月相动画按钮 */
 .moon-phase {
@@ -300,6 +309,11 @@ html {
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     display: flex;
     flex-direction: column;
+    color: #000; /* day mode text black */
+}
+
+.theme-dark #detail-panel {
+    color: #fff; /* dark mode text white */
 }
 
 #detail-panel.show {
@@ -710,44 +724,34 @@ h2::after {
         inset 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-/* Dark模式按钮样式 - 黑底白字 */
-.theme-dark .lang-options button {
-    background: rgba(0, 0, 0, 0.6);
+/* Dark 模式按钮样式 - 整体采用暗红色 */
+.theme-dark .btn-common,
+.theme-dark .icon-btn,
+.theme-dark .slider-control,
+.theme-dark .pdf-btn,
+.theme-dark .lang-options button,
+.theme-dark .close-btn,
+.theme-dark .swiper-button-prev,
+.theme-dark .swiper-button-next {
+    background: #8b0000; /* 暗红色 */
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.3),
-        inset 0 0 15px rgba(255, 255, 255, 0.1);
+    border: 1px solid #660000;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        inset 0 0 10px rgba(255, 0, 0, 0.2);
 }
 
-.lang-options button:hover {
-    background: #000000;
-    color: #ffffff;
-    border-color: #ffffff;
-    transform: translateY(-2px) scale(1.05);
-    /* 白光 */
-    box-shadow: 
-        0 0 12px rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(255, 255, 255, 0.3),
-        0 6px 20px rgba(0, 0, 0, 0.3);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-}
 
-/* Dark模式按钮悬停 - 白底黑字 + 红光 */
-.theme-dark .lang-options button:hover {
-    background: rgba(255, 255, 255, 0.95);
-    color: #000000;
-    border-color: #ff1c1c;
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 
-        0 0 14px rgba(255, 28, 28, 0.6),
-        0 0 22px rgba(255, 28, 28, 0.4),
-        0 6px 25px rgba(255, 28, 28, 0.5);
-    text-shadow: 0 0 8px rgba(255, 28, 28, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+/* Dark 模式按钮悬停 - 在暗红背景上稍微变亮 */
+.theme-dark .btn-common:hover,
+.theme-dark .icon-btn:hover,
+.theme-dark .slider-control:hover,
+.theme-dark .pdf-btn:hover,
+.theme-dark .lang-options button:hover,
+.theme-dark .close-btn:hover,
+.theme-dark .swiper-button-prev:hover,
+.theme-dark .swiper-button-next:hover {
+    filter: brightness(1.2);
 }
 
 .lang-options button:active {

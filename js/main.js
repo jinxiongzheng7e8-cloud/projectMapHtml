@@ -7,6 +7,7 @@ let map;
 let buildingsData = [];
 let panelKeyHandler = null; // reference for keyboard handler
 let swiperInstance = null; // Swiper instance reference
+let currentCoordPopup = null; // 追踪当前显示的坐标弹出框
 
 // 地图底图切换相关变量
 let osmLayer, satelliteLayer;
@@ -30,7 +31,8 @@ function toPixel(latlng) {
 
 function pixelString(pt) {
     // pt.x is longitude, pt.y is latitude as string with fixed decimals
-    return `Lng: ${pt.x}, Lat: ${pt.y}`;
+    // 显示顺序：纬度在前，经度在后
+    return `Lat: ${pt.y}, Lng: ${pt.x}`;
 }
 
 // 若需从 [x,y] 创建 LatLng（用于数据定位）
@@ -88,22 +90,32 @@ function initMap() {
     // 添加自定义类名到 Leaflet 默认控制容器，便于合并/重新命名或单独样式
     if (map && map._controlContainer) {
         map._controlContainer.classList.add('custom-control-container');
-        // 若需要可以移到 .ui-controls 内：
-        // const ui = document.querySelector('.ui-controls');
-        // if (ui && map._controlContainer.parentNode !== ui) {
-        //     ui.appendChild(map._controlContainer);
-        // }
+        const ui = document.querySelector('.ui-controls');
+        if (ui && map._controlContainer.parentNode !== ui) {
+            ui.appendChild(map._controlContainer);
+        }
     }
 
     // 地图范围将在加载数据后根据建筑点计算以避免硬编码
 
-    // 点击事件保持不变，但坐标单位已经变为经纬度
-    map.on('click', () => {
-        // clicking on empty map simply closes any open panel
-        closePanel();
+    // 点击事件：点击地图创建或移除坐标弹出框
+    map.on('click', (e) => {
+        // 如果已有弹出框存在，点击后关闭它
+        if (currentCoordPopup) {
+            map.closePopup(currentCoordPopup);
+            currentCoordPopup = null;
+        } else {
+            // 否则创建新的坐标弹出框
+            const pt = toPixel(e.latlng);
+            const coordText = pixelString(pt);
+            currentCoordPopup = L.popup()
+                .setLatLng(e.latlng)
+                .setContent(coordText)
+                .openOn(map);
+        }
     });
 
-    // 坐标显示/调试工具 (现在显示经纬度)
+    // 坐标显示/调试工具 (显示经纬度，鼠标移动时在顶部显示)
     const coordEl = document.getElementById('coord-display');
     map.on('mousemove', (e) => {
         const pt = toPixel(e.latlng);
@@ -138,6 +150,11 @@ async function loadData() {
 
             marker.on('click', (e) => {
                 L.DomEvent.stopPropagation(e);
+                // 点击标记时关闭坐标弹出框（如果存在）
+                if (currentCoordPopup) {
+                    map.closePopup(currentCoordPopup);
+                    currentCoordPopup = null;
+                }
                 showPanel(building);
             });
         });
