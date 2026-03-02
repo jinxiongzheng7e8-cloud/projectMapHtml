@@ -7,17 +7,24 @@ let map;
 let buildingsData = [];
 let panelKeyHandler = null; // reference for keyboard handler
 let swiperInstance = null; // Swiper instance reference
+
+// 地图底图切换相关变量
+let osmLayer, satelliteLayer;
+let currentBase = 'satellite'; // 当前底图（默认为卫星）
+const mapToggleBtn = () => document.getElementById('map-toggle');
+
 const lightboxOverlay = document.getElementById('lightbox-overlay');
 const lightboxImage = document.getElementById('lightbox-image');
 const lightboxClose = document.querySelector('.lightbox-close');
 
 // --- 坐标工具 ----------------------------------------------------------------
-// 在 L.CRS.Simple 下坐标数组 [x, y] 直接对应像素
-// Leaflet marker 需要 [lat, lng]，所以【数据中的 x 是 lng，y 是 lat】
+// 现在地图使用的是标准地理坐标系 (EPSG:3857)，
+// toPixel 会把 LatLng 转换成简单的经纬度对，返回的 x 即经度，y 即纬度。
+// 如果数据仍为像素坐标，请先转换为真实经纬度后再使用。
 function toPixel(latlng) {
     return {
-        x: Math.round(latlng.lng),   // x = lng（水平轴）
-        y: Math.round(latlng.lat)    // y = lat（竖直轴）
+        x: latlng.lng.toFixed(6),   // x = lng（水平轴），保留小数便于调试
+        y: latlng.lat.toFixed(6)    // y = lat（竖直轴）
     };
 }
 
@@ -35,27 +42,60 @@ function pointToLatLng(x, y) {
 
 // ---------- 地图相关 --------------------------------------------------------
 function initMap() {
+    // ------------------------------------------------------------
+    // 切换到真实经纬度地图，默认定位到 La Trinitat Nova 社区。
+    // 可在需要时调整中心坐标或者 zoom 级别。若希望完全锁定缩放,
+    // 可以将 minZoom/maxZoom 设置为相同值。
+    // ------------------------------------------------------------
+    const center = [41.4489, 2.1862]; // Trinitat Nova approximate center
+    const defaultZoom = 15;
+
     map = L.map('map', {
-        crs: L.CRS.Simple,
-        minZoom: -1,
-        maxZoom: 2,
-        zoomControl: false
+        center: center,
+        zoom: defaultZoom,
+        minZoom: 12,
+        maxZoom: 19,
+        zoomControl: true
     });
 
-    const bounds = [[0, 0], [1000, 1000]]; // 根据地图实际像素尺寸调整
-    // 使用本地地图图片（项目中已包含 assets/map.jpeg）
-    // 注意：Leaflet 对大小写敏感，确保路径和扩展名正确
-    L.imageOverlay('assets/map.jpeg', bounds).addTo(map);
+    // --- 底图图层 ----------------------------------------------------------------
+    // 街道图 (OpenStreetMap)
+    osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 贡献者'
+    });
 
-    map.fitBounds(bounds);
+    // 卫星图 (Esri World Imagery) - 需要在 index.html 中引入 esri-leaflet 插件
+    satelliteLayer = L.esri.tiledMapLayer({
+        url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer',
+        attribution: '来源: Esri, Maxar, Earthstar Geographics 及 GIS 用户社区',
+        maxZoom: 19
+    });
 
+    // 默认使用卫星图
+    satelliteLayer.addTo(map);
+
+    // 图层控制器允许用户在街道/卫星之间切换
+    const baseMaps = {
+        "街道地图": osmLayer,
+        "卫星地图": satelliteLayer
+    };
+    L.control.layers(baseMaps).addTo(map);
+
+    // 将切换按钮样式同步为当前状态
+    updateMapButton();
+
+    // 限制地图可拖拽的范围为一个大致的矩形，避免用户拖出太远
+    const bounds = L.latLngBounds([[41.445, 2.180], [41.4525, 2.1925]]);
+    map.setMaxBounds(bounds);
+
+    // 点击事件保持不变，但坐标单位已经变为经纬度
     map.on('click', (e) => {
         closePanel();
         const pt = toPixel(e.latlng);
         console.log('map clicked at', pt);
     });
 
-    // 坐标显示/调试工具
+    // 坐标显示/调试工具 (现在显示经纬度)
     const coordEl = document.getElementById('coord-display');
     map.on('mousemove', (e) => {
         const pt = toPixel(e.latlng);
@@ -79,10 +119,14 @@ async function loadData() {
                 iconAnchor: [12, 12]
             });
 
-            const marker = L.marker(
-                pointToLatLng(building.coords[0], building.coords[1]),
-                { icon: icon }
-            ).addTo(map);
+            // NOTE: 原来的 coords 是像素坐标 (x=lng,y=lat)。
+            // 使用真实地图时需要将这些值替换为经纬度。此处我们简单
+            // 直接当作 [lng, lat] 传给 Leaflet，后续可以在数据文件中
+            // 更新为正确的地理坐标。
+            const lat = building.coords[1];
+            const lng = building.coords[0];
+
+            const marker = L.marker([lat, lng], { icon: icon }).addTo(map);
 
             marker.on('click', (e) => {
                 L.DomEvent.stopPropagation(e);
@@ -287,6 +331,7 @@ function updateStaticText() {
     document.getElementById('lang-title').textContent = i18next.t('select_language');
     document.getElementById('theme-toggle').setAttribute('aria-label', i18next.t('toggle_theme'));
     document.getElementById('lang-toggle').setAttribute('aria-label', i18next.t('change_language'));
+    document.getElementById('map-toggle').setAttribute('aria-label', i18next.t('toggle_map'));
     // 其他需要翻译的元素可以在这里补充
     document.documentElement.lang = currentLang;
 }
@@ -314,6 +359,38 @@ themeToggle.addEventListener('click', () => {
     const isDark = bodyEl.classList.contains('theme-dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
 });
+
+// 地图视图切换 (街道 / 卫星)
+function updateMapButton() {
+    const btn = mapToggleBtn();
+    if (!btn) return;
+    const icon = btn.querySelector('i');
+    if (currentBase === 'satellite') {
+        btn.classList.add('active');
+        if (icon) icon.className = 'fa-solid fa-satellite';
+    } else {
+        btn.classList.remove('active');
+        if (icon) icon.className = 'fa-solid fa-map';
+    }
+}
+
+function toggleMapMode() {
+    if (currentBase === 'satellite') {
+        map.removeLayer(satelliteLayer);
+        osmLayer.addTo(map);
+        currentBase = 'osm';
+    } else {
+        map.removeLayer(osmLayer);
+        satelliteLayer.addTo(map);
+        currentBase = 'satellite';
+    }
+    updateMapButton();
+}
+
+const mapToggle = mapToggleBtn();
+if (mapToggle) {
+    mapToggle.addEventListener('click', toggleMapMode);
+}
 
 // ---------- 启动 ----------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {

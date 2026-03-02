@@ -5,7 +5,11 @@
 ## 运行
 直接打开 `index.html` 即可（如果涉及跨域，请使用本地服务器）。
 
-> 📌 **提示**: 项目默认使用占位符地图，您可以将真实地图图片命名为 `assets/map.jpg` 并调整 `js/main.js` 中的边界尺寸。
+> 📌 **提示**: 项目现在使用在线地图切片（OpenStreetMap/Esri World Imagery）。
+> 不再依赖静态 `map.jpeg` 文件；如需自定义底图，请修改 `js/main.js` 中的 `osmLayer` 或添加其他 `L.tileLayer`。
+> 页面背景改为纯黑色，原有的动态背景 Canvas 已移除。
+>
+> 界面右上角按钮组包含语言、主题和地图视图切换，风格统一。
 ## 功能
 
 - 基于 Leaflet 的单张图片地图

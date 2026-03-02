@@ -1,6 +1,7 @@
 {
     "select_language": "Triar idioma",
     "toggle_theme": "Canviar tema",
+    "toggle_map": "Canviar vista del mapa",
     "change_language": "Canviar idioma",
     "view_pdf_button": "Veure Document"
 }

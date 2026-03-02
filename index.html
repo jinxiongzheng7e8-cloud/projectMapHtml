@@ -18,8 +18,6 @@
 
 <body>
 
-    <!-- 动态背景 Canvas -->
-    <canvas id="bg-canvas"></canvas>
 
     <!-- 语言选择模态框 (初始显示) -->
     <div id="lang-modal" class="modal-overlay">
@@ -40,6 +38,9 @@
         </button>
         <button id="lang-toggle" class="icon-btn" aria-label="Change Language">
             <i class="fa-solid fa-globe"></i>
+        </button>
+        <button id="map-toggle" class="icon-btn" aria-label="Toggle Map Mode">
+            <i class="fa-solid fa-satellite"></i>
         </button>
     </div>
 
@@ -70,9 +71,11 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Esri Leaflet plugin for satellite imagery -->
+    <script src="https://unpkg.com/esri-leaflet@3.0.19/dist/esri-leaflet.js"></script>
     <script src="https://unpkg.com/i18next@23.2.3/dist/umd/i18next.min.js"></script>
     <!-- 本地脚本 -->
-    <script src="js/bg-animation.js"></script>
+    <!-- 动态背景脚本已移除，将页面背景设置为纯黑 -->
     <script src="js/i18n.js"></script>
     <script src="js/drag.js"></script>
     <!-- Swiper JS -->

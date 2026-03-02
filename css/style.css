@@ -1,9 +1,8 @@
 /* 基础变量与主题定义 */
 :root {
-    --bg: #ffffff;
-    --text: #000000;
-    --accent: #cc0000;
-    /* 红色 */
+    --bg: #000000;   /* 页面默认黑色背景 */
+    --text: #ffffff; /* 默认白色文字 */
+    --accent: #cc0000; /* 红色 */
     /* 玻璃拟态变量 (Light) */
     --panel-bg: rgba(255, 255, 255, 0.75);
     --glass-border: rgba(255, 255, 255, 0.6);
@@ -33,17 +32,6 @@ html {
     color: var(--text);
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s;
-}
-
-/* 动态背景 Canvas */
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0; /* 在地图之下 */
-    pointer-events: none;
 }
 
 /* 地图容器 */
@@ -217,6 +205,16 @@ html {
 }
 .btn-primary:hover {
     background: #b30000; /* Darker red */
+}
+
+/* 地图切换按钮在卫星模式下高亮 */
+#map-toggle.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+}
+#map-toggle.active:hover {
+    background: #b30000;
 }
 .theme-dark .btn-primary:hover {
     background: #ff6b6b;
