@@ -1,75 +1,170 @@
-/* 基础变量与主题定义 */
+/**
+ * css/style.css
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * 应用样式表 | Main Stylesheet
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *
+ * 结构 | Structure:
+ *   1. 根变量和主题定义 (Root variables & themes)
+ *   2. 全局基础样式 (Global base styles)
+ *   3. 地图容器样式 (Map container)
+ *   4. UI 控件样式 (UI controls)
+ *   5. 按钮样式统一 (Unified button styling)
+ *   6. 侧滑面板样式 (Side panel)
+ *   7. 灯箱样式 (Lightbox)
+ *   8. 主题覆盖 (Theme overrides)
+ *   9. 响应式设计 (Responsive design)
+ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   1. 根变量和主题定义 | Root Variables & Theme Definition
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/**
+ * :root | 浅色模式默认变量 | Light mode CSS variables
+ * ─────────────────────────────────────────────────
+ * 这些变量在整个应用中使用，通过 var() 引用
+ * These variables are used throughout the app via CSS var()
+ *
+ * 颜色含义 | Color meanings:
+ *   --bg: 页面/面板背景色 | Page/panel background
+ *   --text: 正文文字颜色 | Body text color
+ *   --accent: 强调色 (按钮/链接/边框) | Accent color for buttons/links/borders
+ *   --panel-bg: 侧面板半透明背景 | Side panel semi-transparent background
+ *   --glass-border: 玻璃态效果边框色 | Glassmorphism border color
+ *   --glass-blur: 模糊效果强度 (像素) | Blur effect strength (px)
+ *   --shadow: 阴影效果 | Shadow effect
+ */
 :root {
-    --bg: #000000;   /* 页面默认黑色背景 */
-    --text: #ffffff; /* 默认白色文字 */
-    --accent: #cc0000; /* 红色 */
-    /* 玻璃拟态变量 (Light) */
-    --panel-bg: rgba(255, 255, 255, 0.75);
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-blur: 16px;
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* 浅色模式: 黑底白字+红色强调 | Light mode: Black bg, white text, red accent */
+    --bg: #000000;                    /* 纯黑背景 */
+    --text: #ffffff;                  /* 纯白文字 */
+    --accent: #cc0000;                /* 鲜红色强调 */
+    
+    /* 玻璃拟态效果变量 (浅色模式) | Glassmorphism variables (light mode) */
+    --panel-bg: rgba(255, 255, 255, 0.75);  /* 半透明白色 (75% 不透明) */
+    --glass-border: rgba(255, 255, 255, 0.6);  /* 半透明白色边框 */
+    --glass-blur: 16px;                /* 16像素高斯模糊 */
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);  /* 浅色阴影 */
 }
 
-/* 月光模式 (Dark Mode) */
+/**
+ * .theme-dark | 暗色模式变量覆盖 | Dark mode CSS variables override
+ * ─────────────────────────────────────────────────
+ * 当 <body> 或 <html> 有 .theme-dark 类时应用这些变量
+ * These override :root variables when .theme-dark class is present
+ */
 .theme-dark {
-    --bg: #1a1a1a;
-    --text: #f0f0f0;
-    --accent: #8b0000;
-    /* 玻璃拟态变量 (Dark) */
-    --panel-bg: rgba(30, 30, 30, 0.75);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    /* 暗色模式: 深灰底白字+暗红色强调 | Dark mode: Dark bg, white text, dark red accent */
+    --bg: #1a1a1a;                    /* 深灰背景 (接近黑色，但更显质感) */
+    --text: #f0f0f0;                  /* 浅灰文字 (纯白会有眼睛疲劳) */
+    --accent: #8b0000;                /* 暗红色强调 (亮度更低，符合暗色主题) */
+    
+    /* 玻璃拟态效果变量 (暗色模式) | Glassmorphism variables (dark mode) */
+    --panel-bg: rgba(30, 30, 30, 0.75);    /* 半透明深灰 */
+    --glass-border: rgba(255, 255, 255, 0.1);  /* 更浅的边框 (白色 10% 不透明) */
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);   /* 更深的阴影 */
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   2. 全局基础样式 | Global Base Styles  
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/**
+ * body, html | 页面根元素样式 | Page root element styling
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 清除浏览器默认外边距
+ *   • 设置全屏布局 (height: 100%)
+ *   • 应用全局背景色和字体
+ *   • 禁用滚动条 (overflow: hidden) 防止溢出
+ *   • 配置颜色过渡动画 (0.3s)，用于主题切换
+ */
 body,
 html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    /* Modern system font stack for better rendering */
+    margin: 0;                      /* 清除默认外边距 | Remove default margins */
+    padding: 0;                     /* 清除默认内边距 | Remove default padding */
+    height: 100%;                   /* 占满全屏高度 | Take up full height */
+    
+    /* 系统字体堆栈，按优先级降序 | System font stack in priority order */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    overflow: hidden;
+    
+    background-color: var(--bg);    /* 应用背景色变量 | Apply background color */
+    color: var(--text);             /* 应用文字色变量 | Apply text color */
+    
+    overflow: hidden;               /* 禁用滚动条，防止页面溢出 | Hide scrollbars */
+    
+    /* 主题切换动画: 0.3秒线性过渡 | Theme switch animation: 0.3s linear transition */
     transition: background-color 0.3s, color 0.3s;
 }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   3. 地图容器样式 | Map Container Styles
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-/* 地图容器 */
+/**
+ * #map | 地图主容器 | Main map container
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • Leaflet 地图的挂载点
+ *   • 配置尺寸、背景、边框、阴影
+ *   • 为伪元素叠加层提供定位上下文
+ *
+ * 视觉效果 | Visual Effects:
+ *   • 1px 内边界阴影: 创建微妙的凹陷感
+ *   • 20px 外阴影: 与黑色背景形成对比
+ *   • 红色弧形边框: 强调色装饰
+ */
 #map {
-    height: 100%;
-    width: 100%;
-    background: transparent; /* 确保背景为黑色底 */
-    z-index: 0; /* 放在所有 UI 之下 */
-    /* 精致的多层阴影与边框 */
+    height: 100%;                   /* 占满容器高度 | Fill parent height */
+    width: 100%;                    /* 占满容器宽度 | Fill parent width */
+    background: transparent;        /* 透明背景，显示黑色页面背景 | Transparent to show page bg */
+    z-index: 0;                     /* 等待所有 UI 之下 | Below all UI elements */
+    
+    /* 精致的多层阴影与边框效果 | Sophisticated shadow and border effects */
     box-shadow: 
-        inset 0 0 0 1px rgba(0,0,0,0.15),
-        0 0 20px rgba(0,0,0,0.1);
-    border: 2px solid var(--accent);
-    position: relative;
+        inset 0 0 0 1px rgba(0,0,0,0.15),      /* 内边界: 微妙的深色线条 */
+        0 0 20px rgba(0,0,0,0.1);              /* 外阴影: 深度感 */
+    
+    border: 2px solid var(--accent);           /* 红色弧形边框 | Red accent border */
+    position: relative;                        /* 为 ::before 和 ::after 伪元素建立定位上下文 */
 }
 
-/* panel coordinate info style */
-.panel-coords {
-    font-size: 0.9rem;
-    color: var(--accent);
-    margin: 4px 0;
-    font-weight: 500;
-}
-
-/* 地图顶部渐变高光效果 */
+/**
+ * #map::before | 地图顶部渐变高光效果 | Top gradient highlight
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 在地图顶部创建白色渐变高光
+ *   • 增加立体感和现代感
+ *
+ * 效果 | Effect:
+ *   • 从上到下: 白色 (0%) → 透明 (100%)
+ *   • pointer-events: none 不阻挡地图交互
+ */
 #map::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: 60px;                   /* 高光条高度 | Highlight bar height */
     background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-    pointer-events: none;
+    pointer-events: none;           /* 允许鼠标穿透到地图 | Let mouse events pass through */
     z-index: 1;
 }
 
-/* 地图边缘玻璃化淡化效果 */
+/**
+ * #map::after | 地图边缘玻璃化淡化效果 | Edge fade & glassmorphism
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 四边淡化: 从中心清晰 → 边缘暗淡
+ *   • 玻璃拟态效果: 略微模糊和光晕
+ *   • 整体营造精致、深度的视界
+ *
+ * 效果分解 | Effect breakdown:
+ *   1. radial-gradient: 径向渐变从中心到四周
+ *   2. backdrop-filter: blur() 轻微模糊效果
+ *   3. box-shadow inset: 边缘光晕和内阴影
+ */
 #map::after {
     content: '';
     position: absolute;
@@ -77,55 +172,100 @@ html {
     left: 0;
     right: 0;
     bottom: 0;
-    pointer-events: none;
+    pointer-events: none;           /* 非交互式叠加层 */
     z-index: 2;
-    /* 边缘径向淡化 */
+    
+    /* 径向渐变: 中心清晰 → 边缘逐渐变暗 | Radial gradient: center clear → edges dark */
     background: radial-gradient(
         ellipse at center,
-        transparent 0%,
+        transparent 0%,             /* 中心完全透明 | Center fully transparent */
         transparent 50%,
-        rgba(0, 0, 0, 0.03) 75%,
-        rgba(0, 0, 0, 0.1) 100%
+        rgba(0, 0, 0, 0.03) 75%,   /* 75% 处: 浅阴影 | 75%: light shadow */
+        rgba(0, 0, 0, 0.1) 100%    /* 边缘: 深阴影 | Edges: deeper shadow */
     );
-    /* 玻璃效果 */
+    
+    /* 玻璃拟态效果: 轻微模糊 | Glassmorphism: subtle blur */
     backdrop-filter: blur(0.5px);
-    -webkit-backdrop-filter: blur(0.5px);
-    /* 边缘光晕 */
+    -webkit-backdrop-filter: blur(0.5px);  /* Safari 兼容 | Safari compatibility */
+    
+    /* 边缘光晕和内部阴影 | Edge glow and inset shadows */
     box-shadow: 
-        inset 0 0 40px rgba(0, 0, 0, 0.08),
-        inset 0 0 80px rgba(0, 0, 0, 0.05);
-    border-radius: inherit;
+        inset 0 0 40px rgba(0, 0, 0, 0.08),    /* 内部淡化阴影 | Inner fade shadow */
+        inset 0 0 80px rgba(0, 0, 0, 0.05);    /* 更淡的内部阴影 | Subtler inner shadow */
+    
+    border-radius: inherit;         /* 继承父类圆角 (若有) | Inherit parent border-radius */
 }
 
-/* 鼠标坐标显示 */
+/**
+ * #coord-display | 鼠标坐标实时显示 | Real-time coordinate display
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 显示鼠标当前位置的经纬度
+ *   • 固定在页面左下角
+ *   • 鼠标离开地图时隐藏
+ *
+ * 位置 | Position:
+ *   • absolute: 绝对定位在地图内
+ *   • bottom: 10px, left: 10px: 左下角内缩
+ *   • z-index: 30 确保在地图层之上
+ *
+ * 样式 | Style:
+ *   • 字体: 等宽 (monospace) 便于对齐数字
+ *   • 背景: 半透明暗灰 rgba(0,0,0,0.6)
+ *   • 颜色: 强调色 (红色)，便于识别
+ *   • 字体大小: 0.85rem (稍小，不突兀)
+ */
 #coord-display {
     position: absolute;
     bottom: 10px;
     left: 10px;
     padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    font-size: 0.85rem;
-    font-family: 'Courier New', monospace;
-    border-radius: 6px;
-    pointer-events: none; /* 不阻挡鼠标 */
-    z-index: 1000;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.6);        /* 半透明黑色背景 | Semi-transparent black bg */
+    color: var(--accent);                  /* 强调色文字 (红色) | Red accent text */
+    font-size: 0.85rem;                    /* 稍小字体 | Slightly smaller font */
+    font-family: 'Courier New', monospace;  /* 等宽字体便于对齐 | Monospace for alignment */
+    border-radius: 4px;
+    z-index: 30;                           /* 在地图控制之上 | Above map controls */
+    opacity: 0.9;
+    pointer-events: none;                  /* 不影响地图交互 | Don't interfere with map */
 }
 
-/* 坐标显示悬停动画 */
+/**
+ * #coord-display:hover | 坐标显示悬停效果 | Coordinate display hover effect
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 当鼠标悬停在坐标文字上时，突出显示
+ *   • 背景变亮，字体变白
+ *
+ * 效果 | Effect:
+ *   • 背景: 半透明升至 0.8 | opacity increases to 0.8
+ *   • 文字: 变白便于对比 | Text turns white for contrast
+ */
 #coord-display:hover {
-    background: rgba(0, 0, 0, 0.9);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 12px rgba(204, 0, 0, 0.2);
-    transform: scale(1.05);
-    border-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
 }
 
-/* UI 控件 */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   4. UI 控件样式 | UI Controls Styling
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/**
+ * .ui-controls | 顶部控制栏容器 | Top control bar container
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 容纳所有顶部 UI 按钮 (主题切换、语言切换、地图切换)
+ *   • 使用 Flexbox 水平排列按钮
+ *   • 创建统一的控制栏外观
+ *
+ * 布局 | Layout:
+ *   • 绝对定位: 右上角 (top: 20px, right: 20px)
+ *   • display: flex, gap: 10px (按钮间距 10px)
+ *   • z-index: 1000 (在地图上方)
+ *
+ * 响应式 | Responsive:
+ *   • 在小屏幕上可能需要调整位置或布局
+ */
 .ui-controls {
     position: absolute;
     top: 20px;
@@ -151,10 +291,6 @@ html {
 .leaflet-control-container.custom-control-container {
     display: none !important;
 }
-.leaflet-control-container {
-    /* no display override; children will inherit button styling */
-}
-
 /* 隐藏 Leaflet 自己添加的背景框（可按需调整） */
 .custom-control-container .leaflet-control {
     background: transparent;
