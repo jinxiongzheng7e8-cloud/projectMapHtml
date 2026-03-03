@@ -44,7 +44,7 @@
     /* 玻璃拟态效果变量 (浅色模式) | Glassmorphism variables (light mode) */
     --panel-bg: rgba(255, 255, 255, 0.75);  /* 半透明白色 (75% 不透明) */
     --glass-border: rgba(255, 255, 255, 0.6);  /* 半透明白色边框 */
-    --glass-blur: 16px;                /* 16像素高斯模糊 */
+    --glass-blur: 30px;                /* 增强模糊效果 (原16px) */
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);  /* 浅色阴影 */
 }
 
@@ -58,7 +58,7 @@
     /* 暗色模式: 深灰底白字+暗红色强调 | Dark mode: Dark bg, white text, dark red accent */
     --bg: #1a1a1a;                    /* 深灰背景 (接近黑色，但更显质感) */
     --text: #f0f0f0;                  /* 浅灰文字 (纯白会有眼睛疲劳) */
-    --accent: #8b0000;                /* 暗红色强调 (亮度更低，符合暗色主题) */
+    --accent: #ad0000;                /* 暗红色强调 (亮度更低，符合暗色主题) */
     
     /* 玻璃拟态效果变量 (暗色模式) | Glassmorphism variables (dark mode) */
     --panel-bg: rgba(30, 30, 30, 0.75);    /* 半透明深灰 */
@@ -220,7 +220,11 @@ html {
     bottom: 10px;
     left: 10px;
     padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.6);        /* 半透明黑色背景 | Semi-transparent black bg */
+    background: rgba(0, 0, 0, 0.25);       /* 更透明的玻璃背景 */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     color: var(--accent);                  /* 强调色文字 (红色) | Red accent text */
     font-size: 0.85rem;                    /* 稍小字体 | Slightly smaller font */
     font-family: 'Courier New', monospace;  /* 等宽字体便于对齐 | Monospace for alignment */
@@ -299,6 +303,7 @@ html {
 /* 统一按钮样式：红底+白字/图标，鼠标移入时变暗（在暗色模式下则变亮） */
 .btn-common,
 .icon-btn,
+#map-toggle,
 .slider-control,
 .pdf-btn,
 .lang-options button,
@@ -311,13 +316,15 @@ html {
     gap: 6px;
     padding: 8px 12px;
     border-radius: 8px;
-    border: 1px solid transparent;
-    background: var(--accent);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(204, 0, 0, 0.45); /* 增加透明度实现玻璃感 */
     color: #ffffff;
     cursor: pointer;
     font-weight: 600;
     transition: all 180ms ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 /* 特殊尺寸保留（圆形图标按钮/小按钮） */
@@ -331,19 +338,23 @@ html {
 /* 悬停/激活/焦点统一反馈 */
 .btn-common:hover,
 .icon-btn:hover,
+#map-toggle:hover,
 .slider-control:hover,
 .pdf-btn:hover,
 .lang-options button:hover,
 .close-btn:hover,
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
-    /* hover in light theme: dim buttons slightly */
-    filter: brightness(0.8);
+    /* 悬停变亮，增强玻璃质感 */
+    filter: brightness(1.1);
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
 }
 
 .btn-common:active,
 .icon-btn:active,
+#map-toggle:active,
 .slider-control:active,
 .pdf-btn:active,
 .lang-options button:active,
@@ -357,6 +368,7 @@ html {
 
 .btn-common:focus,
 .icon-btn:focus,
+#map-toggle:focus,
 .slider-control:focus,
 .pdf-btn:focus,
 .lang-options button:focus,
@@ -377,32 +389,25 @@ html {
     background: #b30000; /* Darker red */
 }
 
-/* 地图切换按钮在卫星模式下高亮 */
-#map-toggle.active {
-    background: var(--accent);
-    color: #fff;
-    border-color: transparent;
-}
-#map-toggle.active:hover {
-    /* hover effect uses dim by default; will be overridden by dark-mode rules */
-    filter: brightness(0.8);
-}
+/* 地图切换按钮使用通用激活样式，JS会在active时添加.btn-primary */
+/* 相关规则由 .btn-primary 和 .icon-btn:hover 处理，无须额外声明 */
 .theme-dark .btn-primary:hover {
     /* brighten slightly over the dark-red base */
     background: #a30000;
 }
-/* 月相动画按钮 */
+/* 月相动画按钮 - 浅色主题：白圆 + 黑阴影 */
 .moon-phase {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: var(--text);
+    background-color: #ffffff;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); /* 月相炫光 */
     transition: background-color 0.3s;
 }
 
-/* 使用伪元素模拟月影遮挡 */
+/* 使用伪元素模拟月影遮挡 - 浅色主题：黑色阴影 */
 .moon-phase::after {
     content: '';
     position: absolute;
@@ -411,7 +416,7 @@ html {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: var(--bg);
+    background-color: #000000;
     transform: translateX(100%);
     /* 初始为满月 */
     transition: transform 0.5s ease-in-out, background-color 0.3s;
@@ -420,6 +425,167 @@ html {
 #theme-toggle:hover .moon-phase::after {
     transform: translateX(40%);
     /* 悬停变成月牙 */
+}
+
+/* 暗色主题：黑圆 + 白阴影 */
+.theme-dark .moon-phase {
+    background-color: #000000;
+}
+
+.theme-dark .moon-phase::after {
+    background-color: #ffffff;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   5. Theme Toggle 统一样式 | Unified Theme Toggle Styling
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/**
+ * .theme-toggle | 所有主题切换元素的统一样式 | Unified styling for all theme toggle elements
+ * ─────────────────────────────────────────────────
+ * 功能 | Purpose:
+ *   • 为所有带有 theme-toggle 类的元素提供一致的视觉效果
+ *   • 确保在日/夜模式下都有合适的对比度和可读性
+ *   • 统一的交互反馈和过渡动画
+ *
+ * 适用元素 | Applies to:
+ *   • #theme-toggle (主题切换按钮)
+ *   • #lang-toggle (语言切换按钮)
+ *   • #map-toggle (地图切换按钮)
+ *   • #close-panel (关闭面板按钮)
+ *
+ * 样式特点 | Style characteristics:
+ *   • 统一的背景色和边框
+ *   • 一致的悬停和激活效果
+ *   • 平滑的过渡动画
+ */
+
+/* 统一的基础样式 */
+.theme-toggle {
+    /* 继承现有的按钮样式，但确保一致性 */
+    background: rgba(204, 0, 0, 0.45); /* 红色玻璃效果 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 日间模式下的特殊样式 */
+.theme-toggle:not(.btn-primary) {
+    /* 非主要按钮的样式调整 */
+    background: rgba(204, 0, 0, 0.35); /* 稍微透明一些 */
+}
+
+/* 暗色模式下的统一调整 */
+.theme-dark .theme-toggle {
+    background: rgba(139, 0, 0, 0.45); /* 暗红色玻璃效果 */
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 统一的悬停效果 */
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15); /* 悬停时变亮 */
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.theme-dark .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* 统一的激活效果 */
+.theme-toggle:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .theme-toggle:active {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* 统一的焦点效果 */
+.theme-toggle:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}
+
+/* 特殊元素的微调 */
+#close-panel.theme-toggle {
+    /* 关闭按钮的特殊样式 */
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+    background: rgba(204, 0, 0, 0.5); /* 稍微更透明 */
+}
+
+.theme-dark #close-panel.theme-toggle {
+    background: rgba(139, 0, 0, 0.5);
+}
+
+/* 主题切换按钮的特殊状态指示 */
+#theme-toggle.theme-toggle.active {
+    /* 主题切换按钮激活时的特殊样式 */
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+}
+
+.theme-dark #theme-toggle.theme-toggle.active {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+/* 灯光效果：添加微妙的发光动画 */
+@keyframes theme-glow {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+}
+
+.theme-toggle {
+    animation: theme-glow 4s ease-in-out infinite;
+}
+
+.theme-dark .theme-toggle {
+    animation: theme-glow 4s ease-in-out infinite;
+    animation-duration: 6s; /* 暗色模式下稍微慢一点 */
+}
+
+/* 移除其他地方可能的重复样式定义 */
+/* 确保 .theme-toggle 样式优先级高于通用按钮样式 */
+.theme-toggle.btn-common,
+.theme-toggle.icon-btn,
+.theme-toggle.close-btn {
+    /* 这些选择器的样式会被 .theme-toggle 覆盖 */
+    /* 保持 .theme-toggle 的样式优先 */
+}
+
+/* 修复按钮样式冲突 - 确保 theme-toggle 样式优先级 */
+.theme-toggle {
+    /* 确保这些样式覆盖通用按钮样式 */
+    background: rgba(204, 0, 0, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 修复暗色模式下的样式优先级 */
+.theme-dark .theme-toggle {
+    background: rgba(139, 0, 0, 0.45) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* 侧滑弹窗 */
@@ -843,7 +1009,7 @@ h2::after {
     margin: 8px;
     padding: 12px 24px;
     cursor: pointer;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.25); /* 玻璃透明效果 */
     color: #000000;
     border: 1px solid rgba(255, 255, 255, 0.3);
     font-size: 1rem;
@@ -863,24 +1029,28 @@ h2::after {
 /* Dark 模式按钮样式 - 整体采用暗红色 */
 .theme-dark .btn-common,
 .theme-dark .icon-btn,
+.theme-dark #map-toggle,
 .theme-dark .slider-control,
 .theme-dark .pdf-btn,
 .theme-dark .lang-options button,
 .theme-dark .close-btn,
 .theme-dark .swiper-button-prev,
 .theme-dark .swiper-button-next {
-    background: #8b0000; /* 暗红色 */
+    background: rgba(139, 0, 0, 0.45); /* 暗色模式玻璃效果 */
     color: #ffffff;
-    border: 1px solid #660000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.5),
-        inset 0 0 10px rgba(255, 0, 0, 0.2);
+        inset 0 0 10px rgba(255, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 
 /* Dark 模式按钮悬停 - 在暗红背景上稍微变亮 */
 .theme-dark .btn-common:hover,
 .theme-dark .icon-btn:hover,
+.theme-dark #map-toggle:hover,
 .theme-dark .slider-control:hover,
 .theme-dark .pdf-btn:hover,
 .theme-dark .lang-options button:hover,

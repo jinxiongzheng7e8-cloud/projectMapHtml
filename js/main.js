@@ -774,12 +774,66 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
 // 主题切换
 const themeToggle = document.getElementById('theme-toggle');
 const bodyEl = document.body;
+const themeToggleElements = document.querySelectorAll('.theme-toggle');
 
 themeToggle.addEventListener('click', () => {
     bodyEl.classList.toggle('theme-dark');
     const isDark = bodyEl.classList.contains('theme-dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    
+    // 更新所有 theme-toggle 元素的视觉状态
+    updateThemeToggleElements(isDark);
 });
+
+/**
+ * updateThemeToggleElements() | 更新所有主题切换元素的视觉状态
+ * ─────────────────────────────────────────────────────
+ * 功能 | Function:
+ *   为所有带有 theme-toggle 类的元素添加或移除 'active' 类
+ *   确保在暗色模式下所有元素都有统一的视觉反馈
+ * 
+ * 参数 | Parameters:
+ *   isDark: {boolean} - 是否为暗色模式
+ * 
+ * 执行流程 | Execution Flow:
+ *   1. 遍历所有 .theme-toggle 元素
+ *   2. 根据 isDark 参数添加或移除 'active' 类
+ *   3. 为关闭按钮添加特殊处理（在暗色模式下更明显）
+ */
+function updateThemeToggleElements(isDark) {
+    themeToggleElements.forEach(element => {
+        if (isDark) {
+            element.classList.add('active');
+            // 为关闭按钮在暗色模式下添加额外的视觉提示
+            if (element.id === 'close-panel') {
+                element.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.5)';
+            }
+        } else {
+            element.classList.remove('active');
+            // 重置关闭按钮的阴影
+            if (element.id === 'close-panel') {
+                element.style.boxShadow = '';
+            }
+        }
+    });
+}
+
+/**
+ * initializeThemeState() | 初始化主题状态
+ * ─────────────────────────────────────────────────────
+ * 功能 | Function:
+ *   页面加载时根据 localStorage 中的设置初始化主题
+ *   并更新所有 theme-toggle 元素的视觉状态
+ */
+function initializeThemeState() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        bodyEl.classList.add('theme-dark');
+        updateThemeToggleElements(true);
+    } else {
+        updateThemeToggleElements(false);
+    }
+}
 
 // 地图视图切换 (街道 / 卫星)
 function updateMapButton() {
@@ -787,11 +841,17 @@ function updateMapButton() {
     if (!btn) return;
     const icon = btn.querySelector('i');
     if (currentBase === 'satellite') {
-        btn.classList.add('active');
+        btn.classList.add('active', 'btn-primary');
         if (icon) icon.className = 'fa-solid fa-satellite';
     } else {
-        btn.classList.remove('active');
+        btn.classList.remove('active', 'btn-primary');
         if (icon) icon.className = 'fa-solid fa-map';
+    }
+    
+    // 确保地图切换按钮也应用 theme-toggle 样式
+    if (btn.classList.contains('theme-toggle')) {
+        // 地图切换按钮在激活时使用 btn-primary 样式
+        // 在非激活状态下保持 theme-toggle 的基础样式
     }
 }
 
@@ -828,8 +888,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         setLanguage(savedLang);
     }
 
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        bodyEl.classList.add('theme-dark');
-    }
+    // 初始化主题状态
+    initializeThemeState();
 });
